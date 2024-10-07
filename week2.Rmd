@@ -1,0 +1,130 @@
+---
+title: "Exercise 1"
+date: "2024-10-07"
+author: 'Yutong Wang'
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document: default
+---
+
+
+(a) Regression, inference, $n = 50$, $p = 6$.
+(b) Classification, prediction, $n = 20$, $p = 15$.
+(c) Regression, prediction, $n = 365/7 \approx 52$, $p = 3$.
+
+```{r }
+# getwd()
+forbes2000 = read.csv("Forbes2000.csv", row.names = 1, skip = 3)
+
+summary(forbes2000)
+```
+
+## 
+
+```{r }
+class(forbes2000$name)
+```
+
+
+```{r }
+forbes2000$name = as.factor(forbes2000$name)
+class(forbes2000$name)
+```
+
+
+```{r}
+attach(forbes2000)
+# country
+class(country)
+
+country = as.factor(country)
+class(country)
+
+# levels(country)
+
+length(levels(country))
+
+category = as.factor(category)
+
+length(levels(category))
+```
+
+```{r (a)}
+name[rank<=20]
+```
+
+```{r }
+# rank
+
+# rank <= 10
+```
+
+
+
+```{r (b)}
+
+par(mfrow=c(1,2))
+hist(marketvalue, nclass=25, main="Histogram of market values", col="gold")
+hist(log(marketvalue), nclass=25, main="Histogram of log market values", col="blue")
+
+```
+
+```{r (c)}
+mean(profits)
+
+mean(profits, na.rm = T)
+```
+
+```{r (d)}
+median(profits[country=="United States"])
+median(profits[country=="United States"], na.rm=T)
+median(profits[country=="United Kingdom"])
+median(profits[country=="United Kingdom"], na.rm=T)
+
+```
+
+```{r}
+a = 3
+
+a == 2
+```
+
+
+```{r (e)}
+# basic logics
+TRUE & FALSE
+TRUE | FALSE
+
+name[( (country=="Germany")&(profits<0) )]
+```
+
+
+```{r}
+table(category[country=="Bermuda"])
+```
+
+```{r}
+profits.sort = sort(profits, decreasing = T)
+profit_ori = profits
+# sort in descending order
+
+
+tt = subset(forbes2000, profits>=profits.sort[50])
+# subset can create a sub-dataframe
+
+dim(tt)
+```
+
+```{r}
+# par(mfrow=c(1,1))
+
+plot(tt$assets, tt$profits)
+
+plot(log(tt$assets), log(tt$profits))
+
+plot(log(tt$assets), log(tt$profits), xlab="log Assets", ylab="log Profits", cex.lab=2, pch=20, col="darkgreen")
+```
+
+
+
