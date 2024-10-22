@@ -1,0 +1,256 @@
+---
+title: "ST309 Week 3"
+output:
+  pdf_document: default
+  html_document: default
+date: '2023-10-09'
+---
+
+## 3.2 Functions
+
+# Elements in defining a function: input, output, how to get output from input.
+
+# One can set default input.
+
+
+```{r}
+Addfunction = function(a,b){
+  return(a+b)
+}
+
+# Addfunction(2)
+Addfunction(2,4)
+# Addfunction()
+```
+
+# Side effect: sometimes we do not need any output, instead, we want the function to draw a plot for example.
+
+```{r}
+Meanfunction = function(a){
+  plot(a) 
+  return(sum(a)/length(a))
+}
+
+a = 5:20
+Meanfunction(a)
+
+```
+
+# *recursion (advanced topic)
+
+```{r}
+Fab = function(n){
+  if (n==1 || n==2){
+    return(1)} 
+  else return(Fab(n-1) + Fab(n-2))
+}
+```
+
+
+```{r}
+Fab(20)
+```
+
+
+
+
+## 3.3 Loops
+
+# For loop: when you know exactly the number of iteration steps
+
+```{r}
+
+# a = c(1,2,3,2,4,5)
+a = 1:100
+
+# sum(a)
+
+summation = 0
+l = length(a)
+for (i in 1:l){
+  summation = summation + a[i]
+  # print(i)
+}
+
+a = 1:100
+i = 1
+while (i<l){
+  summation = summation + a[i]
+  i = i + 1
+}
+
+summation
+```
+
+
+```{r}
+a = 1:100
+l = length(a)
+i = 1
+summation = 0
+while (i<=l){
+  summation = summation + a[i]
+  i = i + 1
+}
+
+summation
+```
+
+# While: when you know the end condition but not the number of iteration steps
+
+```{r}
+j <- 1
+while (j<6){
+  print(j)
+  j = j+1
+}
+```
+
+# repeat: using 'break' to specify terminating condition
+
+(I never used 'repeat'.)
+
+```{r}
+j = 1
+repeat{
+  print(j)
+  j <- j+1
+  if (j>5) break
+}
+```
+
+## 3.4 If else
+
+```{r}
+a = 1:100
+l = length(a)
+summation = 0
+for (i in 1:l){
+  if (i%2 == 1){
+    summation = summation + a[i]
+  }
+}
+
+```
+
+
+```{r}
+x = 11
+# ans = 0
+
+if (x>=10){
+  ans = x + 10}
+
+
+ans
+```
+
+```{r}
+x = 0
+
+if (x>=10){ans = x+10} else {ans=x}
+
+ans
+```
+
+# change line: Curly bracket needed
+
+```{r}
+x = 0
+{if (x>=10) ans = x+10 
+  else ans=x}
+ans
+```
+
+# else if: More than 2 situations
+
+```{r}
+x = 1
+{if (x>=10) ans = x+10
+  else if (x>0) {ans = x+1
+      ans = ans + 1 }
+  else if (x>-1) ans = x
+  else if (x>-1.5) ans = ans
+  else ans = x - 1}
+ans
+```
+
+# ifelse(condition, vec1, vec2) can be applied to a vector
+
+```{r}
+setwd('/Users/wyt233/Library/CloudStorage/OneDrive-LondonSchoolofEconomics/ST309 2024/week3')
+mk2nd = read.table('marks2.txt', header=T, row.names = 1)
+attach(mk2nd)
+pf <- ifelse(exam1 + exam2 + exam3>=60, 'PASS', 'FAILED')
+pf
+
+```
+
+## 3.5 Avoiding loops
+
+```{r}
+# exam1+exam2+exam3
+pf2 = apply(mk2nd, 1, sum)
+
+# 1 means applying to all rows
+# 2 means applying to all columns
+
+pf2
+```
+
+```{r}
+mat = matrix(1:24, 8, 3)
+mat
+# apply(mat, 2, mean)
+
+#apply(mat, 1, mean)
+# about the second argument
+# 1 - for row
+# 2 - for column
+# apply(mat, 1, sum)
+# apply(mat, 2, max)
+# customise the function
+# apply(mat, 2, function(x) x[1]+x[2] )
+```
+
+# Q1
+
+```{r}
+test = function(x){
+  p = length(x)
+  
+  res = matrix(0,p,p) # initialisation
+  
+  for (i in 1:p){
+    for (j in 1:p){
+      res[i,j] = x[i] - x[j]
+    }
+  }
+  return(res)
+}
+
+test(1:10)
+```
+
+# An example in numerical analysis
+
+A typical situation to use 'while' rather than 'for':
+
+```{r}
+left = -1
+right = 0
+step = 0
+
+
+while ( right - left > 0.000000001){
+  new = (left + right)/2
+  f = exp(new) + new
+  if (f > 0){
+    right = new
+  }
+  else if (f < 0){
+    left = new
+  }
+  step = step + 1
+}
+```
