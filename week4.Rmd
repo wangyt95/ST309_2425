@@ -1,0 +1,225 @@
+---
+title: "ST309-week4"
+output:
+  pdf_document: default
+  html_document: default
+date: "2023-10-16"
+---
+
+
+```{r}
+
+# install.packages('ISLR')
+library('ISLR')
+Colloge = College
+attach(College)
+```
+
+(a)
+```{r}
+summary(College)
+```
+There are 565 private colleges, and 212 non-private colleges.
+
+(b)
+
+```{r}
+
+```
+
+
+```{r}
+pairs(College[,1:10])
+```
+
+There are highly correlated pairs of variables such as (Apps, Accept), (Accept, Enroll), (Enroll,
+P.Undergrad), (Top10perc, Top25perc). To make the plot less dense, we use the first 100 colleges
+data to reproduce the plot pairs(College[1:100,1:10])
+
+
+```{r}
+pairs(College[1:100,1:10])
+```
+
+(c)
+```{r}
+plot(Private, Outstate, col=c("red","blue"), xlab="Private", ylab="Outstate
+Tuition", main="Boxplots of out-of-state tuition of US colleges",
+cex.main=2, cex.label=2, cex.axis=1.5)
+```
+
+(d)
+```{r}
+Elite=ifelse(Top10perc>50, "Yes","No")
+
+Elite
+```
+
+```{r}
+Elite=as.factor(Elite)
+college=data.frame(College, Elite) # this new college has 19 variables
+write.table(college, "college.txt")
+```
+
+```{r}
+plot(Elite, Outstate, col=c("red","blue"), xlab="Elite", ylab="Outstate
+Tuition", main="Boxplots of out-of-state tuition of US colleges",
+cex.main=2, cex.label=2, cex.axis=1.5)
+```
+
+(e)
+```{r}
+par(mfrow=c(2,3))
+hist(Apps, nclass=25)
+hist(Accept, nclass=25)
+hist(Enroll, nclass=25)
+hist(Top10perc, nclass=25)
+hist(F.Undergrad, nclass=25)
+hist(Room.Board, nclass=25)
+
+```
+(f)(1)
+```{r}
+plot(S.F.Ratio, Grad.Rate) 
+cor(S.F.Ratio, Grad.Rate) 
+```
+
+(f)(2)
+```{r}
+table(Elite, Private)
+```
+Note 65/(65 + 500) = 11.5% of private colleges are elite, while merely 13/(13 + 199) = 6.13% of
+non-private colleges are elite
+
+(f)(3)
+```{r}
+plot(Private, perc.alumni, xlab="Private", ylab="Percentage of alumni who donate", cex.label=2)
+```
+
+(f)(4)
+
+There are different way to measure the importance. With the given info, the most relevant index
+is the graduate rate. We could also include percentage of alumni who donate as an indication.
+
+Since the faculty PhD rate is positively correlated with the graduation rate and the percentage
+of donation, it is important.
+
+```{r}
+pairs(data.frame(PhD, Grad.Rate, perc.alumni))
+cor(data.frame(PhD, Grad.Rate, perc.alumni))
+
+```
+
+5(b)
+
+```{r}
+JohnEvening=function(a, b) {
+  X = runif(1, 0, 60)
+  print(X)
+  if((X>a)&(X<=b)) cat("visit mother", "\n")
+  else if((X>(30+a))&(X<=(30+b))) cat("visit mother", "\n")
+  else cat("visit girlfriend", "\n")
+  
+}
+
+JohnEvening(5,15)
+JohnEvening(5,15)
+
+```
+
+```{r}
+ExpectationY = function(n, a, b){
+  X = runif(n, 0, 60)
+  Y = rep(0, n) # copy 0 n times in a vector
+  for (i in 1:n){
+    if( (X[i]>a) & (X[i]<=b) ){
+      Y[i] = 1
+      # cat("visit mother", "\n")
+    }
+    else if( (X[i]>(30+a)) & (X[i]<=(30+b)) ){
+      Y[i] = 1
+      # cat("visit mother", "\n")
+    }
+    else{
+      Y[i] = 0
+      # cat("visit girlfriend", "\n")
+    }
+  }
+  return(30*mean(Y))
+}
+
+set.seed(62537)
+ExpectationY(10000,5,15)
+```
+
+
+```{r}
+# set.seed(65999)
+ExpectationY(100000,5,15)
+```
+
+
+Why use sort?
+Without sort, need three conditions:
+X_1 + X_2 > X_3
+X_2 + X_3 > X_1
+X_1 + X_3 > X_2
+
+after sort, just need one:
+X_1 < X_2 < X_3
+
+```{r}
+prob3angle = function(n) {
+  X = matrix(runif(3*n), ncol=3)
+  for(i in 1:n) X[i,]=sort(X[i,]) # put each row in ascending order
+  Y = X[,1][(X[,1]+X[,2])>X[,3]] # remove the row that three values cannot be lengths for 3 sides.
+  cat("The probability is:",length(Y)/n,"\n")
+}
+
+set.seed(1763)
+prob3angle(10000)
+set.seed(1763)
+prob3angle(10000)
+
+prob3angle(10000)
+prob3angle(10000)
+prob3angle(10000)
+prob3angle(10000)
+prob3angle(10000)
+
+
+```
+```{r}
+prob3angle(4)
+```
+
+use loops
+```{r}
+Prob3angles = function(n){
+  X = matrix(runif(3*n), ncol=3)
+  Y = rep(0, n)
+  for(i in 1:n) X[i,] = sort(X[i,])
+  for(i in 1:n){
+    if( X[i,1]+X[i,2]>X[i,3] ){
+      Y[i] = 1
+    }
+  }
+  return(mean(Y))
+}
+
+Prob3angles(10000)
+Prob3angles(10000)
+Prob3angles(10000)
+Prob3angles(10000)
+
+```
+
+
+```{r}
+set.seed(10000)
+rnorm(5)
+
+set.seed(9999)
+rnorm(5)
+```
+
