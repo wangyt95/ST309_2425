@@ -1,0 +1,104 @@
+---
+title: "ST309 week 6"
+output:
+  pdf_document: default
+  html_document: default
+date: "2023-10-30"
+---
+
+```{r}
+library(MASS)
+names(Boston) # show the column names
+# View(Boston)
+
+boston = Boston
+```
+
+
+
+```{r}
+attach(boston)
+lm1.Boston = lm(medv~lstat)
+summary(lm1.Boston)
+```
+
+
+
+```{r}
+names(lm1.Boston)
+
+lm1.Boston$rank # take a look at a specific item in the model
+```
+
+```{r}
+confint(lm1.Boston)
+```
+
+```{r}
+
+# calculate \hat{f}(5) \hat{f}(10) \hat{f}(15)
+predict(lm1.Boston, data.frame(lstat=c(5,10,15)), interval = 'confidence' )
+
+# the second argument of function 'predict' should be in dataframe format.
+```
+
+```{r}
+# difference between 'prediction interval' and 'confidence interval'
+# confidence interval treat the true value of the mean as known.
+# prediction interval has a larger range, as it first estimate the mean.
+browseURL("https://online.stat.psu.edu/stat501/lesson/3/3.3")
+```
+
+
+```{r}
+predict(lm1.Boston, data.frame(lstat=c(5,10,15)), interval="prediction")
+```
+
+
+```{r}
+plot(lstat, medv)  # scatter plot
+abline(lm1.Boston) # add a straight line
+```
+
+```{r}
+# par(mfrow=c(2,2))
+plot(lm1.Boston) # model diagnostic checking
+```
+
+Delete 215-th 413-rd 375-th observations
+
+```{r}
+Boston1 = Boston[-c(215,413,375), ]
+dim(Boston1)
+```
+
+```{r}
+lm11 = lm(Boston1$medv~Boston1$lstat )
+summary(lm11)
+```
+
+# Remove covariates
+
+```{r}
+lm2.Boston = lm(medv~., Boston)
+summary(lm2.Boston)
+```
+
+p-value of 'age' is 0.958229, remove it.
+
+```{r}
+lm3.Boston = lm(medv ~ .-age, Boston)
+summary(lm3.Boston)
+```
+
+continue to remove 'indus'
+
+```{r}
+lm4.Boston = update(lm3.Boston, ~ .-indus)
+summary(lm4.Boston)
+```
+
+Multiple R-squared remains unchanged - 0.7406, but adjusted R-squared increase slightly.
+
+
+
