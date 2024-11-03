@@ -1,0 +1,235 @@
+---
+title: "ST309 week 5"
+output: html_document
+date: "2023-10-23"
+---
+
+
+pnorm(x) = P(X <= x), X follows a standard normal.
+
+```{r}
+pnorm(0)
+qnorm(0.5)
+
+pnorm(3)
+pnorm(2)
+pnorm(1)
+```
+
+
+```{r cars}
+
+
+pbinom(1.2, 1, 0.5)
+
+pbinom(60, 85, 0.5) 
+pbinom(60, 85, 0.6)
+
+pbinom(60, 85, 0.6)
+
+pbinom(60, 85, 0.6, lower.tail = F) 
+
+pbinom(60, 85, 0.6) + pbinom(60, 85, 0.6, lower.tail = F) 
+
+qbinom(0.9837345, 85, 0.6) 
+```
+
+```{r}
+punif(-0.2)
+```
+
+
+
+```{r}
+x = seq(-3, 3, length = 200)
+plot(x, dnorm(x), type = 'l', col='black')
+
+lines(x, dt(x, df=16), col='blue') # add a line
+lines(x, dt(x, df=4), col='green')
+lines(x, dt(x, df=2), col='red')
+
+# t distribution has a fat tail than standard normal
+# proposition: t distribution converges in distribution to standard normal as df goes to infinity
+```
+
+```{r}
+a = rnorm(25,0,1)
+b = matrix(a, 5, 5)
+# the function 'matrix' can reshape a vector
+
+print(b)
+
+print('next')
+print(a)
+
+```
+
+```{r}
+# set seeds
+rnorm(5)
+rnorm(5)
+
+set.seed(998)
+rnorm(5)
+set.seed(999)
+rnorm(5)
+
+set.seed(1)
+rnorm(5)
+set.seed(1)
+rnorm(5)
+
+
+```
+```{r}
+set.seed(1005)
+a = rnorm(500)
+mean(a)
+
+set.seed(1005)
+b = rnorm(500000)
+mean(b)
+
+# law of large numbers
+```
+
+
+
+```{r}
+
+set.seed(100)
+sample(1:10 ,5)
+
+set.seed(9999)
+sample(1:10, 5, replace = T)
+
+set.seed(9999)
+sample(1:10, 5, replace = F)
+```
+
+
+
+###### Examples
+
+Justify central limit theorem
+
+Compare the histogram 
+
+```{r}
+poisSampleMean1 = function(n, lambda, r){
+  meanvec <- c() # empty vector
+  for(j in 1:r){
+    sampvals = rpois(n, lambda)
+    meanvec = c(meanvec, mean(sampvals))
+  }
+  meanvec
+}
+```
+
+
+
+
+```{r}
+set.seed(1)
+poisSampleMean1(100, 5, 6)
+```
+
+```{r}
+histNorm = function(data, nbins = 21){
+  hist(data, breaks = seq(min(data), max(data), length=nbins),
+       probability=T, col=5)
+  x = seq(min(data), max(data), length=200)
+  lines(x, dnorm(x,mean=mean(data),sd=sd(data)),col=2)
+}
+```
+
+
+
+
+```{r}
+histNorm(poisSampleMean1(80,1,10000), nbins = 100)
+```
+
+
+```{r}
+histNorm(poisSampleMean1(100, 10, 10000))
+```
+
+## Calculate the area of unit circle
+
+```{r}
+n = 5000000
+
+success = 0
+for(i in 1:n){
+  x = runif(1, -1, 1)
+  y = runif(1, -1, 1)
+  if(x**2 + y**2 <= 1){
+    success = success + 1 
+  }
+}
+
+S = 4 * success / n
+print(S)
+
+pi 
+```
+
+
+
+
+```{r}
+a = seq(20,60,30)
+```
+
+# Exercise 3
+
+```{r}
+x=c( 1,0,1,
+   + 0,0,0,
+   + 1,1,1,
+   + 1,1,1,
+   + 1,1,1,
+   + 0,1,0,
+   + 1,1,1,
+   + 1,0,1,
+   + 1,0,1,
+   + 1,1,1,
+   + 1,0,1,
+   + 0,0,1)
+
+X=matrix(x, ncol=3, byrow=T)
+dim(X)
+```
+
+```{r}
+colnames(X)=c("Head Shape", "Body Shape", "Body Colour")
+
+Churn = c(0,1,1,1,1,0,1,0,0,1,0,1)
+
+
+```
+
+
+```{r}
+library(tree)
+
+YX=data.frame(Churn, X)
+
+YX
+```
+
+
+```{r}
+Churn.tree=tree(Churn ~ ., YX, control=tree.control(12, mincut=1, minsize=2))
+
+summary(Churn.tree)
+```
+
+```{r}
+plot(Churn.tree, col="red", lwd=2) # 'lwd' for 'line width' defines the width of lines
+text(Churn.tree)
+```
+
+
+
